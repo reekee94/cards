@@ -9,7 +9,7 @@ db port in .env it will qual `PGPORT` (by default its 5432)
 
 
 ## Contains swagger documentation
-# on http://host:PORT/swagger
+http://localhost:5003/swagger
 
 ```bash
 $ npm install

@@ -32,6 +32,7 @@ import { CreateCardDto } from './dtos/createCard.dto';
 import { GuardedRequest } from 'src/common/models/models';
 import { CreateCardCommand } from './commands/impl/create-card.command';
 import { UpdateCardCommand } from './commands/impl/update-card.command';
+import { DeleteCardCommand } from './commands/impl/delete-card.command copy';
 
 @Controller('cards')
 @ApiTags('cards')
@@ -124,5 +125,26 @@ export class CardController {
     res
       .status(HttpStatus.OK)
       .json(new MessageResponse('The card was successfully created.'));
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Put(':id')
+  @ApiOkResponse({
+    type: MessageResponse,
+  })
+  @ApiBearerAuth()
+  async deleteCard(
+    @Req() req: GuardedRequest,
+    @Param() param: { id: number },
+    @Res() res: Response,
+  ) {
+    const ownerId = req.user.id;
+    const { id } = param;
+
+    await this._commandBus.execute(new DeleteCardCommand(id, ownerId));
+
+    res
+      .status(HttpStatus.OK)
+      .json(new MessageResponse('The card was successfully deleted.'));
   }
 }

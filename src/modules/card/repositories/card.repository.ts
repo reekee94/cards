@@ -18,6 +18,11 @@ export class CardRepository {
     return await repo.save(card);
   }
 
+  async delete(card: Card, qr: QueryRunner) {
+    const repo = this._getRepository(qr);
+    return await repo.delete(card);
+  }
+
   async findAll(qr: QueryRunner) {
     const repo = this._getRepository(qr);
     const cards = await repo.find();
