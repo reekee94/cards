@@ -18,10 +18,8 @@ export class DefaultUserDto {
   updatedAt: Date;
 
   constructor(entity: UserEntity) {
-    // const dto = new DefaultUserDto();
     this.id = entity.id;
     this.email = entity.email;
     this.name = entity.name;
-    // return dto;
   }
 }

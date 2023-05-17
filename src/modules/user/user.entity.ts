@@ -1,5 +1,5 @@
 import { DefaultFields } from 'src/common/utils/default.fields';
-import { Entity, Column, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Token } from '../token/token.entity';
 import { Card } from '../card/entities/card.entity';
 
@@ -21,10 +21,10 @@ export class User extends DefaultFields {
   @JoinColumn()
   refreshToken: Token;
 
-  // @ManyToOne(() => Card, (card) => card.users, {
-  //   onDelete: 'SET NULL',
-  //   nullable: true,
-  //   eager: true,
-  // })
-  // cards: Card;
+  @OneToMany(() => Card, (card) => card.owner, {
+    onDelete: 'SET NULL',
+    nullable: true,
+    // eager: true,
+  })
+  cards: Card;
 }

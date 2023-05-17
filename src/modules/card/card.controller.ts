@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Param,
@@ -32,7 +33,7 @@ import { CreateCardDto } from './dtos/createCard.dto';
 import { GuardedRequest } from 'src/common/models/models';
 import { CreateCardCommand } from './commands/impl/create-card.command';
 import { UpdateCardCommand } from './commands/impl/update-card.command';
-import { DeleteCardCommand } from './commands/impl/delete-card.command copy';
+import { DeleteCardCommand } from './commands/impl/delete-card.command';
 
 @Controller('cards')
 @ApiTags('cards')
@@ -54,12 +55,13 @@ export class CardController {
 
   @UseGuards(AccessTokenGuard)
   @Get(':id')
-  @ApiParam({ name: 'cardId', type: Number })
+  @ApiParam({ name: 'id', type: Number })
   @ApiOkResponse({ type: DefaultCardDto })
   @ApiBearerAuth()
-  async register(@Param() body: { cardId: number }, @Res() res: Response) {
-    const { cardId } = body;
-    const card = await this._queryBus.execute(new GetCardByIdQuery(cardId));
+  async register(@Param() param: { id: number }, @Res() res: Response) {
+    const { id } = param;
+
+    const card = await this._queryBus.execute(new GetCardByIdQuery(id));
 
     res.status(HttpStatus.OK).json(new SuccessResponseWithBody(card));
   }
@@ -86,11 +88,11 @@ export class CardController {
     @Body() body: CreateCardDto,
     @Res() res: Response,
   ) {
-    const ownerId = req.user.id;
+    const owner = req.user;
     const { name, cardType } = body;
 
     const card = await this._commandBus.execute(
-      new CreateCardCommand(name, ownerId, cardType),
+      new CreateCardCommand(name, owner, cardType),
     );
 
     res.status(HttpStatus.OK).json(new SuccessResponseWithBody(card));
@@ -101,10 +103,16 @@ export class CardController {
   @ApiOkResponse({
     type: MessageResponse,
   })
+  @ApiParam({ name: 'id', type: Number })
   @ApiBody({
     type: CreateCardDto,
     examples: {
-      exp: { value: {} },
+      exp: {
+        value: {
+          name: 'test',
+          cardType: 'Gold',
+        },
+      },
     },
   })
   @ApiBearerAuth()
@@ -124,14 +132,15 @@ export class CardController {
 
     res
       .status(HttpStatus.OK)
-      .json(new MessageResponse('The card was successfully created.'));
+      .json(new MessageResponse('The card was successfully updated.'));
   }
 
   @UseGuards(AccessTokenGuard)
-  @Put(':id')
+  @Delete(':id')
   @ApiOkResponse({
     type: MessageResponse,
   })
+  @ApiParam({ name: 'id', type: Number })
   @ApiBearerAuth()
   async deleteCard(
     @Req() req: GuardedRequest,

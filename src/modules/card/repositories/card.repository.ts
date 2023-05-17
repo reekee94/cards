@@ -1,15 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { QueryRunner } from 'typeorm';
 import { Card } from '../entities/card.entity';
+import { CardType } from '../entities/card_type.entity';
+import { User } from 'src/modules/user/user.entity';
 
 @Injectable()
 export class CardRepository {
-  async create(name, ownerId, cardType, qr: QueryRunner) {
+  async create(name: string, owner: User, cardType: CardType, qr: QueryRunner) {
     const repo = this._getRepository(qr);
     const newCard = new Card();
     newCard.cardType = cardType;
     newCard.name = name;
-    newCard.owner = ownerId;
+    newCard.owner = owner;
     return repo.save(newCard);
   }
 

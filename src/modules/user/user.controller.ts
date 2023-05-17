@@ -7,7 +7,6 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -20,6 +19,7 @@ import { MessageResponse } from 'src/common/models/messageResponse';
 import { GuardedRequest } from 'src/common/models/models';
 import { UpdateUserNameCommand } from './commands/impl/update-user-name.handler';
 import { UpdateUserNameDto } from './dtos/updateUserName.dto';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 @Controller('users')
 @ApiTags('users')
@@ -51,10 +51,10 @@ export class UserController {
     @Body() body: UpdateUserNameDto,
     @Res() res: Response,
   ) {
-    const bbid_user = req.user;
+    const user = req.user;
 
     await this._commandBus.execute(
-      new UpdateUserNameCommand(bbid_user.email, body.name),
+      new UpdateUserNameCommand(user.email, body.name),
     );
 
     res

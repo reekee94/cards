@@ -1,6 +1,6 @@
 import { LoginUserCommandHandler } from './login.handlers';
-import { LogoutUserCommandHandler } from './logout.handlers copy';
-import { RefreshUserCommandHandler } from './refresh-tokken.handlers copy 2';
+import { LogoutUserCommandHandler } from './logout.handlers';
+import { RefreshUserCommandHandler } from './refresh-tokken.handlers';
 import { RegisterUserCommandHandler } from './register.handlers';
 import { UpdateUserNameCommandHandler } from './update-user-name.handler';
 

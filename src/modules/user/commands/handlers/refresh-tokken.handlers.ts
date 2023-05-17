@@ -15,14 +15,14 @@ export class RefreshUserCommandHandler
   constructor(
     private readonly _commandBus: CommandBus,
     private readonly _dataSource: DataSource,
-    private readonly _bbidRepository: UserRepository,
+    private readonly _UserRepository: UserRepository,
   ) {}
 
   async execute(command: RefreshUserCommand) {
     return await runWithQueryRunner(this._dataSource, async (qr) => {
       const { user } = command;
 
-      const candidate = await this._bbidRepository.findOneById(user.id, qr);
+      const candidate = await this._UserRepository.findOneById(user.id, qr);
 
       if (!candidate) {
         throw new UnauthorizedException();

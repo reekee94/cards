@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { DefaultUserDto } from 'src/modules/user/dtos/defaultUser.dto';
+import { User } from 'src/modules/user/user.entity';
 
 export type RequestWithBody<T> = Request<
   Record<string, never>,
@@ -31,4 +31,4 @@ export type RequestWithBodyAndQuery<T, K> = Request<
   K
 >;
 
-export type GuardedRequest = Request & { user: DefaultUserDto };
+export type GuardedRequest = Request & { user: User };

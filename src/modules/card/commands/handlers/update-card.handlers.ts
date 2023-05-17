@@ -1,4 +1,4 @@
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { runWithQueryRunner } from 'src/common/utils/runWithQueryRunner';
 import { DataSource } from 'typeorm';
 import { CardRepository } from '../../repositories/card.repository';
@@ -7,9 +7,9 @@ import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { UpdateCardCommand } from '../impl/update-card.command';
 import { CardTypeRepository } from '../../repositories/card_type.repository';
 
-@QueryHandler(UpdateCardCommand)
+@CommandHandler(UpdateCardCommand)
 export class UpdateCardCommandHandler
-  implements IQueryHandler<UpdateCardCommand>
+  implements ICommandHandler<UpdateCardCommand>
 {
   constructor(
     private readonly _ds: DataSource,

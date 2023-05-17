@@ -11,7 +11,7 @@ import { CardTypeRepository } from './repositories/card_type.repository';
 import { CardCommandHandlers } from './commands/handlers';
 
 @Module({
-  imports: [CqrsModule, TypeOrmModule.forFeature([Card, CardType])],
+  imports: [TypeOrmModule.forFeature([Card, CardType]), CqrsModule],
   controllers: [CardController],
   providers: [
     CardRepository,
@@ -20,12 +20,6 @@ import { CardCommandHandlers } from './commands/handlers';
     CardsSeed,
     CardTypeRepository,
   ],
-  exports: [
-    CardRepository,
-    CardsSeed,
-    CardTypeRepository,
-    ...CardQueryHandlers,
-    ...CardCommandHandlers,
-  ],
+  exports: [CardRepository, CardsSeed, CardTypeRepository],
 })
 export class CardModule {}

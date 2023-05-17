@@ -1,5 +1,4 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-// import { BbidUserDto } from 'src/modules/bbid/dtos/bbidUser.dto';
 import { TokenRepository } from '../../token.repository';
 import { TokenService } from '../../token.service';
 import { GenerateTokensCommand } from '../impl/generate-tokens.command';

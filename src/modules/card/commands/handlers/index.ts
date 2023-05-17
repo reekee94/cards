@@ -1,6 +1,6 @@
-import { CreateCardCommandHandler } from './create-card.handler';
-import { DeleteCardCommandHandler } from './delete-card.handler';
-import { UpdateCardCommandHandler } from './update-card.handler';
+import { CreateCardCommandHandler } from './create-card.handlers';
+import { DeleteCardCommandHandler } from './delete-card.handlers';
+import { UpdateCardCommandHandler } from './update-card.handlers';
 
 export const CardCommandHandlers = [
   CreateCardCommandHandler,

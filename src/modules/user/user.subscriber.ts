@@ -24,7 +24,6 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
       throw new Error('App config does not exists');
     }
     this._appConfig = config;
-    console.log('11111111111111111', config);
   }
 
   listenTo() {
@@ -32,8 +31,6 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
   }
 
   async beforeInsert({ entity }: InsertEvent<User>): Promise<void> {
-    console.log('11111111111111111', this._appConfig.bcryptSalt);
-
     if (entity.password) {
       entity.password = await generateHashFromString(
         entity.password,

@@ -6,8 +6,8 @@ import { User as UserEntity } from './user.entity';
 export class UserRepository {
   async create(email: string, password: string, qr: QueryRunner) {
     const userRepo = this._getRepository(qr);
-    const newBbid = userRepo.create({ password: password, email: email });
-    return await userRepo.save(newBbid);
+    const newUser = userRepo.create({ password: password, email: email });
+    return await userRepo.save(newUser);
   }
 
   async findOneByEmail(email: string, qr: QueryRunner) {

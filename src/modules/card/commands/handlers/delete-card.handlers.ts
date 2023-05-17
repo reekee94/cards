@@ -1,13 +1,13 @@
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { runWithQueryRunner } from 'src/common/utils/runWithQueryRunner';
 import { DataSource } from 'typeorm';
 import { CardRepository } from '../../repositories/card.repository';
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
-import { DeleteCardCommand } from '../impl/delete-card.command copy';
+import { DeleteCardCommand } from '../impl/delete-card.command';
 
-@QueryHandler(DeleteCardCommand)
+@CommandHandler(DeleteCardCommand)
 export class DeleteCardCommandHandler
-  implements IQueryHandler<DeleteCardCommand>
+  implements ICommandHandler<DeleteCardCommand>
 {
   constructor(
     private readonly _ds: DataSource,

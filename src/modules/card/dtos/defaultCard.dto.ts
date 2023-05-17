@@ -13,14 +13,14 @@ export class DefaultCardDto {
   cardType: CardTypesType;
 
   @ApiProperty()
-  ownerId: number;
+  owner: number;
 
   static fromEntity(entity: Card) {
     const dto = new DefaultCardDto();
     dto.id = entity.id;
     dto.name = entity.name;
     dto.cardType = entity.cardType.name;
-    dto.ownerId = entity.owner.id;
+    dto.owner = entity.owner.id;
     return dto;
   }
 }

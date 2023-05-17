@@ -8,8 +8,8 @@ export class Card extends DefaultFields {
   @Column()
   name: string;
 
-  @OneToOne(() => User, (user) => user.id, { eager: true })
-  @JoinColumn()
+  @ManyToOne(() => User, (user) => user.id, { eager: true })
+  // @JoinColumn()
   owner: User;
 
   @ManyToOne(() => CardType, (cardType) => cardType.cards, { eager: true })
