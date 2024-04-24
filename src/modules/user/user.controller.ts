@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Delete,
   HttpStatus,
+  Param,
   Put,
   Req,
   Res,
@@ -17,8 +19,8 @@ import { Response } from 'express';
 import { AccessTokenGuard } from 'src/common/guards/access.guard';
 import { MessageResponse } from 'src/common/models/messageResponse';
 import { GuardedRequest } from 'src/common/models/models';
-import { UpdateUserNameCommand } from './commands/impl/update-user-name.handler';
-import { UpdateUserNameDto } from './dtos/updateUserName.dto';
+import { UpdateUserNameCommand } from '../card/commands/impl/update-user-name.handler';
+import { UpdateUserNameDto } from '../card/dtos/updateUserName.dto';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 @Controller('users')
@@ -30,25 +32,14 @@ export class UserController {
   ) {}
 
   @UseGuards(AccessTokenGuard)
-  @Put('name')
+  @Delete(':id')
   @ApiOkResponse({
     type: MessageResponse,
-  })
-  @ApiBadRequestResponse({
-    schema: {
-      oneOf: [
-        {
-          title: 'User not exists',
-          description: 'First you need to create a user.',
-          example: 'First you need to create a user.',
-        },
-      ],
-    },
   })
   @ApiBearerAuth()
   async setUserName(
     @Req() req: GuardedRequest,
-    @Body() body: UpdateUserNameDto,
+    @Param() body: UpdateUserNameDto,
     @Res() res: Response,
   ) {
     const user = req.user;

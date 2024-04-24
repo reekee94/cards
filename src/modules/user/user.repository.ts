@@ -28,12 +28,6 @@ export class UserRepository {
     return candidate;
   }
 
-  async updateUserName(user: UserEntity, name: string, qr: QueryRunner) {
-    const repo = this._getRepository(qr);
-    user.name = name;
-    return await repo.save(user);
-  }
-
   private _getRepository(qr: QueryRunner) {
     return qr.manager.getRepository(UserEntity);
   }

@@ -11,9 +11,6 @@ export class User extends DefaultFields {
   @Column({ unique: true, nullable: false })
   email: string;
 
-  @Column({ nullable: true })
-  name: string;
-
   @OneToOne(() => Token, (token) => token.user, {
     onDelete: 'SET NULL',
     nullable: true,

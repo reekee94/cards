@@ -30,7 +30,7 @@ export class UpdateCardCommandHandler
         throw new ForbiddenException('Card not owned');
       }
 
-      if (cardType !== candidate.cardType.name) {
+      if (cardType !== candidate.cardImages.name) {
         const newCardType = await this._cardTypeRepo.findOneByName(
           cardType,
           qr,
@@ -41,10 +41,10 @@ export class UpdateCardCommandHandler
             `CardType not found with name: ${cardType}.`,
           );
         }
-        candidate.cardType = newCardType;
+        candidate.cardImages = newCardType;
       }
 
-      candidate.name = name;
+      candidate.image = name;
       const updatedCard = await this._cardRepo.update(candidate, qr);
 
       return DefaultCardDto.fromEntity(updatedCard);

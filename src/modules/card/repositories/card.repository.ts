@@ -1,16 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { QueryRunner } from 'typeorm';
 import { Card } from '../entities/card.entity';
-import { CardType } from '../entities/card_type.entity';
+import { CardImage } from '../../image/entities/card_image.entity';
 import { User } from 'src/modules/user/user.entity';
 
 @Injectable()
 export class CardRepository {
-  async create(name: string, owner: User, cardType: CardType, qr: QueryRunner) {
+  async create(
+    name: string,
+    owner: User,
+    cardType: CardImage,
+    qr: QueryRunner,
+  ) {
     const repo = this._getRepository(qr);
     const newCard = new Card();
-    newCard.cardType = cardType;
-    newCard.name = name;
+    // newCard.cardImages = cardType;
+    newCard.image = name;
     newCard.owner = owner;
     return repo.save(newCard);
   }
@@ -40,7 +45,7 @@ export class CardRepository {
   async findOneByNameAndOwner(name: string, ownerId: number, qr: QueryRunner) {
     const repo = this._getRepository(qr);
     const card = await repo.findOne({
-      where: { name: name, owner: { id: ownerId } },
+      where: { image: name, owner: { id: ownerId } },
     });
     return card;
   }

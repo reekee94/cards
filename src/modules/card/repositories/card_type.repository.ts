@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { QueryRunner } from 'typeorm';
-import { CardType } from '../entities/card_type.entity';
+import { CardImage } from '../../image/entities/card_image.entity';
 import { CardTypesType } from 'src/common/constants';
 
 @Injectable()
@@ -33,6 +33,6 @@ export class CardTypeRepository {
   }
 
   private _getRepository(qr: QueryRunner) {
-    return qr.manager.getRepository(CardType);
+    return qr.manager.getRepository(CardImage);
   }
 }

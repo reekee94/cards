@@ -1,17 +1,20 @@
 import { DefaultFields } from 'src/common/utils/default.fields';
-import { Entity, Column, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
 import { User } from '../../user/user.entity';
-import { CardType } from './card_type.entity';
+import { CardImage } from '../../image/entities/card_image.entity';
 
 @Entity()
 export class Card extends DefaultFields {
   @Column()
-  name: string;
+  image: string;
+
+  @Column()
+  description: string;
 
   @ManyToOne(() => User, (user) => user.id, { eager: true })
   // @JoinColumn()
   owner: User;
 
-  @ManyToOne(() => CardType, (cardType) => cardType.cards, { eager: true })
-  cardType: CardType;
+  @OneToMany(() => CardImage, (cardImage) => cardImage.card, { eager: true })
+  cardImages: CardImage[];
 }

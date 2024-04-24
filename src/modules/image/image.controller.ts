@@ -26,19 +26,10 @@ import {
   ApiOkResponseWithArray,
   SuccessResponseWithBody,
 } from 'src/common/models/successResponseWithBody';
-import { GetCardsListQuery } from './queries/impl/get-cards-list.query';
-import { GetCardByIdQuery } from './queries/impl/get-card-by-id.query';
-import { DefaultCardDto } from './dtos/defaultCard.dto';
-import { MessageResponse } from 'src/common/models/messageResponse';
-import { CreateCardDto } from './dtos/createCard.dto';
-import { GuardedRequest } from 'src/common/models/models';
-import { CreateCardCommand } from './commands/impl/create-card.command';
-import { UpdateCardCommand } from './commands/impl/update-card.command';
-import { DeleteCardCommand } from './commands/impl/delete-card.command';
-import { UpdateUserNameDto } from './dtos/updateUserName.dto';
 
-@Controller('cards')
-@ApiTags('cards')
+
+@Controller('image')
+@ApiTags('image')
 export class CardController {
   constructor(
     private readonly _queryBus: QueryBus,

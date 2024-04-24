@@ -8,9 +8,6 @@ export class DefaultUserDto {
   @ApiProperty()
   email: string;
 
-  @ApiProperty({ nullable: true })
-  name: string;
-
   @ApiProperty()
   createdAt: Date;
 
@@ -20,6 +17,5 @@ export class DefaultUserDto {
   constructor(entity: UserEntity) {
     this.id = entity.id;
     this.email = entity.email;
-    this.name = entity.name;
   }
 }

@@ -6,12 +6,12 @@ import { CardRepository } from './repositories/card.repository';
 import { CardQueryHandlers } from './queries/handlers';
 import { Card } from './entities/card.entity';
 import { CardsSeed } from './seeds/card-type.seed';
-import { CardType } from './entities/card_type.entity';
+import { CardImage } from '../image/entities/card_image.entity';
 import { CardTypeRepository } from './repositories/card_type.repository';
 import { CardCommandHandlers } from './commands/handlers';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Card, CardType]), CqrsModule],
+  imports: [TypeOrmModule.forFeature([Card, CardImage]), CqrsModule],
   controllers: [CardController],
   providers: [
     CardRepository,
