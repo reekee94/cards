@@ -1,17 +1,20 @@
 export type ValueOf<T> = T[keyof T];
 
-export const applicationName = 'Cards';
+export const electronics = 'Electronics';
+export const games = 'Games';
+export const grocery = 'Grocery';
+export const kids = 'Kids';
+export const automotive = 'Automotive';
 
-export const gold = 'Gold';
-export const silver = 'Silver';
-export const iron = 'Iron';
-export const composite = 'Composite';
-
-export const cardTypes = {
-  gold,
-  silver,
-  iron,
-  composite,
+export const departments = {
+  electronics,
+  games,
+  grocery,
+  kids,
+  automotive,
 } as const;
 
-export type CardTypesType = ValueOf<typeof cardTypes>;
+export type DepartmentTypes = ValueOf<typeof departments>;
+
+export const applicationName = 'Employee Management';
+

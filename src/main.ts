@@ -1,7 +1,6 @@
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { IAppConfig } from './common/configs/app.config';
 import { ConfigNames } from 'src/common/types/enums/configNames.enum';
@@ -12,7 +11,6 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
-  app.use(cookieParser());
 
   setupSwagger(app);
 

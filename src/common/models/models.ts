@@ -1,5 +1,4 @@
 import { Request } from 'express';
-import { User } from 'src/modules/user/user.entity';
 
 export type RequestWithBody<T> = Request<
   Record<string, never>,
@@ -31,4 +30,3 @@ export type RequestWithBodyAndQuery<T, K> = Request<
   K
 >;
 
-export type GuardedRequest = Request & { user: User };

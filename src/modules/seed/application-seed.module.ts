@@ -1,11 +1,12 @@
 import { Module, OnApplicationBootstrap } from '@nestjs/common';
-import { UserModule } from '../user/user.module';
-import { CardModule } from '../card/card.module';
+import { CompanyModule } from '../company/company.module';
 import { ApplicationSeedService } from './application-seed.service';
+import { CardCommandHandlers } from '../company/commands/handlers';
+import { CqrsModule } from '@nestjs/cqrs';
 
 @Module({
-  imports: [UserModule, CardModule],
-  providers: [ApplicationSeedService],
+  imports: [CompanyModule, CqrsModule],
+  providers: [ApplicationSeedService, ...CardCommandHandlers],
 })
 export class ApplicationSeedModule implements OnApplicationBootstrap {
   constructor(private readonly seedService: ApplicationSeedService) {}
