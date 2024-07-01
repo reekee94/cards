@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -25,6 +26,9 @@ export const runWithQueryRunner = async <T>(
     }
     if (error instanceof UnauthorizedException) {
       throw new UnauthorizedException(error.message);
+    }
+    if (error instanceof ForbiddenException) {
+      throw new ForbiddenException(error.message);
     }
     throw new InternalServerErrorException();
   } finally {

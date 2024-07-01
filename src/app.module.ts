@@ -13,8 +13,10 @@ import { UserModule } from './modules/user/user.module';
 import { typeOrmConfig } from './common/database/database.migrations';
 import jwtConfig from './common/configs/jwt.config';
 import cookieConfig from './common/configs/cookie.config';
-import { ApplicationSeedModule } from './modules/seed/application-seed.module';
-import { CardModule } from './modules/card/card.module';
+// import { ApplicationSeedModule } from './modules/seed/application-seed.module';
+import { PortfolioModule } from './modules/portfolio/portfolio.module';
+import { ImageModule } from './modules/portfolio_image/portfolio_image.module';
+
 
 @Module({
   imports: [
@@ -25,8 +27,9 @@ import { CardModule } from './modules/card/card.module';
     TypeOrmModule.forRoot(typeOrmConfig),
     AuthModule,
     UserModule,
-    CardModule,
-    ApplicationSeedModule,
+    PortfolioModule,
+    ImageModule,
+    // ApplicationSeedModule,
   ],
   controllers: [],
   providers: [],

@@ -11,7 +11,7 @@ export const typeOrmConfig: DataSourceOptions = {
   entities: ['dist/**/*.entity.js'],
   migrations: ['dist/migrations/**/*.js'],
   migrationsRun: true,
-  logging: true,
+  logging: false,
 };
 
 const AppSource = new DataSource(typeOrmConfig);

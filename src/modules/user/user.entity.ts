@@ -1,7 +1,8 @@
 import { DefaultFields } from 'src/common/utils/default.fields';
 import { Entity, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Token } from '../token/token.entity';
-import { Card } from '../card/entities/card.entity';
+import { Portfolio } from '../portfolio/entities/portfolio.entity';
+
 
 @Entity()
 export class User extends DefaultFields {
@@ -18,10 +19,10 @@ export class User extends DefaultFields {
   @JoinColumn()
   refreshToken: Token;
 
-  @OneToMany(() => Card, (card) => card.owner, {
-    onDelete: 'SET NULL',
+  @OneToMany(() => Portfolio, (card) => card.owner, {
+    onDelete: 'CASCADE',
     nullable: true,
     // eager: true,
   })
-  cards: Card;
+  cards: Portfolio;
 }
