@@ -14,8 +14,8 @@ import { typeOrmConfig } from './common/database/database.migrations';
 import jwtConfig from './common/configs/jwt.config';
 import cookieConfig from './common/configs/cookie.config';
 // import { ApplicationSeedModule } from './modules/seed/application-seed.module';
-import { PortfolioModule } from './modules/portfolio/portfolio.module';
-import { ImageModule } from './modules/portfolio_image/portfolio_image.module';
+import { TeamModule } from './modules/teams/team.module';
+import { CountersModule } from './modules/counters/counters.module';
 
 
 @Module({
@@ -27,8 +27,8 @@ import { ImageModule } from './modules/portfolio_image/portfolio_image.module';
     TypeOrmModule.forRoot(typeOrmConfig),
     AuthModule,
     UserModule,
-    PortfolioModule,
-    ImageModule,
+    TeamModule,
+    CountersModule,
     // ApplicationSeedModule,
   ],
   controllers: [],
