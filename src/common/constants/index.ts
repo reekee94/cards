@@ -1,6 +1,6 @@
 export type ValueOf<T> = T[keyof T];
 
-export const applicationName = 'Cards';
+export const applicationName = 'TEST';
 
 export const gold = 'Gold';
 export const silver = 'Silver';

@@ -8,6 +8,9 @@ export class DefaultUserDto {
   @ApiProperty()
   email: string;
 
+  @ApiProperty()
+  role: string;
+
   @ApiProperty({ nullable: true })
   name: string;
 
@@ -21,5 +24,6 @@ export class DefaultUserDto {
     this.id = entity.id;
     this.email = entity.email;
     this.name = entity.name;
+    this.role = entity.role;
   }
 }

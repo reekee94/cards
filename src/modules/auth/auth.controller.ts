@@ -27,7 +27,7 @@ import { AuthResponseDto } from './dtos/authResponse.dto';
 import { DefaultUserDto } from '../user/dtos/defaultUser.dto';
 import { RefreshUserCommand } from '../user/commands/impl/refresh.command';
 import { LoginUserCommand } from '../user/commands/impl/login.command';
-import { RegisterUserCommand } from '../user/commands/impl/register.command';
+import { RegisterAdminUserCommand } from '../user/commands/impl/register-admin.command';
 import { LogoutUserCommand } from '../user/commands/impl/logout.command';
 
 @Controller('auth')
@@ -59,7 +59,7 @@ export class AuthController {
   })
   async register(@Body() body: AuthDto, @Res() res: Response) {
     await this._commandBus.execute(
-      new RegisterUserCommand(body.email, body.password),
+      new RegisterAdminUserCommand(body.email, body.password),
     );
 
     res.status(HttpStatus.OK).json(new MessageResponse('Success'));

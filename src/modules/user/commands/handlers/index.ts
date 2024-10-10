@@ -1,11 +1,11 @@
 import { LoginUserCommandHandler } from './login.handlers';
 import { LogoutUserCommandHandler } from './logout.handlers';
 import { RefreshUserCommandHandler } from './refresh-tokken.handlers';
-import { RegisterUserCommandHandler } from './register.handlers';
-import { UpdateUserNameCommandHandler } from './update-user-name.handler';
+import { RegisterUserCommandHandler } from './register-admin.handlers';
+import { AddUserCommandHandler } from './add-user.handler';
 
 export const UserCommandHandlers = [
-  UpdateUserNameCommandHandler,
+  AddUserCommandHandler,
   LoginUserCommandHandler,
   LogoutUserCommandHandler,
   RefreshUserCommandHandler,

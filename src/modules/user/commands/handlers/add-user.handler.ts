@@ -3,26 +3,27 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { runWithQueryRunner } from 'src/common/utils/runWithQueryRunner';
 import { DataSource } from 'typeorm';
 import { UserRepository } from '../../user.repository';
-import { UpdateUserNameCommand } from '../impl/update-user-name.handler';
+import { AddUserCommand } from '../impl/add-user.handler';
 
-@CommandHandler(UpdateUserNameCommand)
-export class UpdateUserNameCommandHandler
-  implements ICommandHandler<UpdateUserNameCommand>
+
+@CommandHandler(AddUserCommand)
+export class AddUserCommandHandler
+  implements ICommandHandler<AddUserCommand>
 {
   constructor(
     private readonly _ds: DataSource,
     private readonly _userRepo: UserRepository,
   ) {}
-  async execute(command: UpdateUserNameCommand): Promise<any> {
+  async execute(command: AddUserCommand): Promise<any> {
     return await runWithQueryRunner(this._ds, async (qr) => {
       const { email, name } = command;
       const user = await this._userRepo.findOneByEmail(email, qr);
 
-      if (!user) {
-        throw new BadRequestException('First you need to create a user.');
+      if (user) {
+        throw new BadRequestException('Allready created');
       }
 
-      await this._userRepo.updateUserName(user, name, qr);
+      return await this._userRepo.create(email, name, 'basic', qr);
     });
   }
 }

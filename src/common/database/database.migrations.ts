@@ -1,19 +1,19 @@
-import { DataSource, DataSourceOptions } from 'typeorm';
-import { databaseConfig } from '../configs/database.config';
+// import { DataSource, DataSourceOptions } from 'typeorm';
+// import { databaseConfig } from '../configs/database.config';
 
-export const typeOrmConfig: DataSourceOptions = {
-  type: 'postgres',
-  host: databaseConfig.host,
-  port: databaseConfig.port,
-  username: databaseConfig.userName,
-  password: databaseConfig.password,
-  database: databaseConfig.dbName,
-  entities: ['dist/**/*.entity.js'],
-  migrations: ['dist/migrations/**/*.js'],
-  migrationsRun: true,
-  logging: true,
-};
+// export const typeOrmConfig: DataSourceOptions = {
+//   type: 'mysql',  // Change to 'mysql' for MySQL
+//   host: databaseConfig.host,
+//   port: databaseConfig.port,
+//   username: databaseConfig.userName,
+//   password: databaseConfig.password,
+//   database: databaseConfig.dbName,
+//   entities: ['dist/**/*.entity.js'],
+//   migrations: ['dist/migrations/**/*.js'],
+//   migrationsRun: true,
+//   logging: false,
+// };
 
-const AppSource = new DataSource(typeOrmConfig);
+// const AppSource = new DataSource(typeOrmConfig);
 
-export default AppSource;
+// export default AppSource;

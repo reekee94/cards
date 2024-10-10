@@ -1,11 +1,11 @@
 ## Installation
 
-Instal and configure PostgreSQL
+Instal and configure MySQL
 
-create postgres user in .env it will qual `PGUSER`
-set password for your db in .env it will qual `PGPASSWORD`
-created db in .env it will qual `PGDATABASE`
-db port in .env it will qual `PGPORT` (by default its 5432)
+create db user in .env it will qual `DB_USERNAME`
+set password for your db in .env it will qual `DB_PASSWORD`
+created db in .env it will qual `DB_NAME`
+db port in .env it will qual `DB_PORT` (by default its 3306)
 
 
 ## Contains swagger documentation

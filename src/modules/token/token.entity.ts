@@ -1,17 +1,32 @@
-import { Exclude } from 'class-transformer';
-import { DefaultFields } from 'src/common/utils/default.fields';
-import { Column, Entity, OneToOne } from 'typeorm';
+import {
+  Column,
+  DataType,
+  ForeignKey,
+  HasOne,
+  Model,
+  Table,
+} from 'sequelize-typescript';
 import { User } from '../user/user.entity';
 
-@Entity()
-export class Token extends DefaultFields {
-  @Column()
+
+@Table({
+  tableName: 'tokens',
+  timestamps: true,
+})
+export class Token extends Model<Token> {
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
   refreshToken: string;
 
-  @OneToOne(() => User, (user) => user.refreshToken, {
-    onDelete: 'CASCADE',
-    nullable: false,
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
   })
-  @Exclude()
+  userId: number;
+
+  @HasOne(() => User)
   user: User;
 }

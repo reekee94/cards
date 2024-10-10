@@ -1,30 +1,52 @@
-import { DefaultFields } from 'src/common/utils/default.fields';
-import { Entity, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
+import {
+  Column,
+  DataType,
+  ForeignKey,
+  HasOne,
+  Model,
+  Table,
+} from 'sequelize-typescript';
 import { Token } from '../token/token.entity';
-import { Card } from '../card/entities/card.entity';
 
-@Entity()
-export class User extends DefaultFields {
-  @Column()
+
+@Table({
+  tableName: 'users',
+  timestamps: true,
+})
+export class User extends Model<User> {
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
   password: string;
 
-  @Column({ unique: true, nullable: false })
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+    unique: true,
+  })
   email: string;
 
-  @Column({ nullable: true })
+  @Column({
+    type: DataType.STRING,
+  })
+  role: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
   name: string;
 
-  @OneToOne(() => Token, (token) => token.user, {
-    onDelete: 'SET NULL',
-    nullable: true,
+  @ForeignKey(() => Token)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
   })
-  @JoinColumn()
-  refreshToken: Token;
+  tokenId: number;
 
-  @OneToMany(() => Card, (card) => card.owner, {
+  @HasOne(() => Token, {
     onDelete: 'SET NULL',
-    nullable: true,
-    // eager: true,
   })
-  cards: Card;
+  refreshToken: Token;
 }

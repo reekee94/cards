@@ -4,9 +4,9 @@ import { User as UserEntity } from './user.entity';
 
 @Injectable()
 export class UserRepository {
-  async create(email: string, password: string, qr: QueryRunner) {
+  async create(email: string, password: string, role: string,  qr: QueryRunner) {
     const userRepo = this._getRepository(qr);
-    const newUser = userRepo.create({ password: password, email: email });
+    const newUser = userRepo.create({ password: password, email: email, role });
     return await userRepo.save(newUser);
   }
 

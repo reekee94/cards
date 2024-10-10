@@ -13,8 +13,8 @@ export class GetUserQueryHandler implements IQueryHandler<GetUserQuery> {
   ) {}
   async execute(query: GetUserQuery): Promise<DefaultUserDto | null> {
     return await runWithQueryRunner(this._dataSource, async (qr) => {
-      const { email } = query;
-      const user = await this._userRepo.findOneByEmail(email, qr);
+      const { id } = query;
+      const user = await this._userRepo.findOneById(id, qr);
 
       if (!user) {
         return null;
