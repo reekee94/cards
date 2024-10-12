@@ -1,64 +1,42 @@
 import { Injectable } from '@nestjs/common';
-import { QueryRunner } from 'typeorm';
-import { User } from 'src/modules/user/user.entity';
-import { Counter } from '../../counters/entities/counter.entity';
+import { DataSource, QueryRunner, Repository } from 'typeorm';
 import { Team } from '../entities/team.entity';
+import { User } from '../../user/user.entity';
 
 @Injectable()
 export class TeamRepository {
-  async create(
-    name: string,
-    description: string,
-    owner: User,
-    counters: Counter[] | undefined,
-    qr: QueryRunner,
-  ) {
-    const repo = this._getRepository(qr);
-    const newTeam = new Team();
-    newTeam.name = name;
-    newTeam.description = description;
-    newTeam.owner = owner;
-    newTeam.counters = counters || [];
-    newTeam.totalSteps = newTeam.calculateTotalSteps(); // Automatically set total steps
-    return repo.save(newTeam);
+  constructor(private readonly dataSource: DataSource) {}
+
+  
+  // Create a new team using QueryRunner
+  async create(name: string, description: string, members: User[], qr: QueryRunner): Promise<Team> {
+    const teamRepo = qr.manager.getRepository(Team);
+    const newTeam = teamRepo.create({ name, description, members });
+    return await teamRepo.save(newTeam);
   }
 
-  async update(team: Team, qr: QueryRunner) {
-    const repo = this._getRepository(qr);
-    team.totalSteps = team.calculateTotalSteps(); // Recalculate total steps
-    return await repo.save(team);
+  async findAll(qr?: QueryRunner): Promise<Team[]> {
+    const teamRepo = qr ? qr.manager.getRepository(Team) : this._getDefaultRepository();
+    return await teamRepo.find({ relations: ['members'] });
   }
 
-  async delete(team: Team, qr: QueryRunner) {
-    const repo = this._getRepository(qr);
-    return await repo.delete(team.id);
+  async findOneById(id: number, qr?: QueryRunner): Promise<Team | null> {
+    const teamRepo = qr ? qr.manager.getRepository(Team) : this._getDefaultRepository();
+    return await teamRepo.findOne({ where: { id }, relations: ['members'] });
   }
 
-  async findAll(qr: QueryRunner) {
-    const repo = this._getRepository(qr);
-    const teams = await repo.find({ relations: ['owner', 'counters'] });
-    return teams;
+  async update(team: Team, qr: QueryRunner): Promise<Team> {
+    const teamRepo = qr.manager.getRepository(Team);
+    return await teamRepo.save(team);
   }
 
-  async findOneById(id: number, qr: QueryRunner) {
-    const repo = this._getRepository(qr);
-    const team = await repo.findOne({ where: { id }, relations: ['owner', 'counters'] });
-    return team;
+
+  async delete(teamId: number, qr: QueryRunner): Promise<void> {
+    const teamRepo = qr.manager.getRepository(Team);
+    await teamRepo.delete(teamId);
   }
 
-  async findOneByOwnerId(ownerId: number, qr: QueryRunner) {
-    const repo = this._getRepository(qr);
-    const team = await repo.findOne({ where: { owner: { id: ownerId } }, relations: ['owner', 'counters'] });
-    return team;
-  }
-
-  async findOneByCounterId(counterId: number, qr: QueryRunner) {
-    const repo = this._getRepository(qr);
-    const team = await repo.findOne({ where: { counters: { id: counterId } }, relations: ['owner', 'counters'] });
-    return team;
-  }
-
-  private _getRepository(qr: QueryRunner) {
-    return qr.manager.getRepository(Team);
+  private _getDefaultRepository(): Repository<Team> {
+    return this.dataSource.getRepository(Team);
   }
 }

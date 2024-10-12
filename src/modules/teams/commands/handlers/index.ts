@@ -1,5 +1,5 @@
-import { CreateTeamCommandHandler } from './create-portfolio.handlers';
-import { DeleteTeamCommandHandler } from './delete-portfolio.handlers';
+import { CreateTeamCommandHandler } from './create-team.handlers';
+import { DeleteTeamCommandHandler } from './delete-team.handlers';
 import { UpdateTeamCommandHandler } from './update-team.handlers';
 
 export const CardCommandHandlers = [

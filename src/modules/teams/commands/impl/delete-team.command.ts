@@ -1,6 +1,6 @@
 export class DeleteTeamCommand {
   constructor(
     public readonly id: number,
-    public readonly ownerId: number,
+    public readonly userId: number,
   ) {}
 }

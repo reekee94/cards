@@ -15,18 +15,21 @@ export class DeleteTeamCommandHandler
 
   async execute(command: DeleteTeamCommand): Promise<void> {
     return await runWithQueryRunner(this._ds, async (qr) => {
-      const { id, ownerId } = command;
+      const { id, userId } = command;
       const team = await this._teamRepo.findOneById(id, qr);
 
       if (!team) {
         throw new BadRequestException(`Team with id: ${id} not found`);
       }
 
-      if (team.owner.id !== ownerId) {
-        throw new BadRequestException(`Unauthorized action`);
-      }
+      const lastMember = (team.members.length === 1) && team.members[0].id === userId
 
-      await this._teamRepo.delete(team, qr);
+      if (lastMember || team.members.length === 0) {
+        await this._teamRepo.delete(team.id, qr);
+        return;
+      }
+        
+      throw new BadRequestException(`Unauthorized action`);
     });
   }
 }

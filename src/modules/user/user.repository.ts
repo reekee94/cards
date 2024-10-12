@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { QueryRunner } from 'typeorm';
+import { DataSource, QueryRunner, Repository } from 'typeorm';
 import { User as UserEntity } from './user.entity';
 
 @Injectable()
 export class UserRepository {
+  constructor(private readonly dataSource: DataSource) {}
+
+  
   async create(email: string, password: string, qr: QueryRunner) {
     const userRepo = this._getRepository(qr);
     const newUser = userRepo.create({ password: password, email: email });
@@ -19,8 +22,8 @@ export class UserRepository {
     return candidate;
   }
 
-  async findOneById(id: number, qr: QueryRunner) {
-    const userRepo = this._getRepository(qr);
+  async findOneById(id: number, qr?: QueryRunner) {
+    const userRepo = qr ? this._getRepository(qr) : this._getDefaultRepository();
     const candidate = await userRepo.findOne({
       where: { id },
     });
@@ -30,5 +33,9 @@ export class UserRepository {
 
   private _getRepository(qr: QueryRunner) {
     return qr.manager.getRepository(UserEntity);
+  }
+
+  private _getDefaultRepository(): Repository<UserEntity> {
+    return this.dataSource.getRepository(UserEntity);
   }
 }

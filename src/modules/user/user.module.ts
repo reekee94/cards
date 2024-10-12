@@ -18,5 +18,6 @@ import { UserSubscriber } from './user.subscriber';
     ...UserCommandHandlers,
     UserSubscriber,
   ],
+  exports: [UserRepository],
 })
 export class UserModule {}

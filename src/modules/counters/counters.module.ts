@@ -1,20 +1,18 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CountersController } from './counters.controller';
 import { TeamRepository } from '../teams/repositories/team.repository';
-import { Counter } from './entities/counter.entity';
-import { CounterCommandHandlers } from './commands/handlers';
-import { CounterRepository } from './repositories/counter.repository';
+import { CounterService } from './service/counter.service';
+import { CounterController } from './controllers/v1/counters.controller';
+import { UserRepository } from '../user/user.repository';
+import { Team } from '../teams/entities/team.entity';
+import { User } from '../user/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Counter]), CqrsModule],
-  controllers: [CountersController],
-  providers: [CounterRepository,
-    TeamRepository,
-    Counter,
-    // ...CardQueryHandlers,
-    ...CounterCommandHandlers],
-  exports: [CounterRepository],
+  imports: [
+    TypeOrmModule.forFeature([User, Team]),
+  ],
+  controllers: [CounterController],
+  providers: [CounterService, UserRepository, TeamRepository],
 })
 export class CountersModule {}

@@ -21,18 +21,19 @@ import {
 } from '@nestjs/swagger';
 import { Response } from 'express';
 import { AccessTokenGuard } from 'src/common/guards/access.guard';
-import {
-  SuccessResponseWithBody,
-} from 'src/common/models/successResponseWithBody';
+import { SuccessResponseWithBody } from 'src/common/models/successResponseWithBody';
 import { GuardedRequest } from 'src/common/models/models';
 import { MessageResponse } from '../../common/models/messageResponse';
 import { GetTeamsListQuery } from './queries/impl/get-team-list.query';
 import { GetTeamByIdQuery } from './queries/impl/get-team-by-id.query';
 import { CreateTeamDto } from './dtos/create-team.dto';
-import { CreateTeamCommand } from './commands/impl/create-portfolio.command';
 import { UpdateTeamDto } from './dtos/update-team.dto';
 import { UpdateTeamCommand } from './commands/impl/update-team.command';
 import { DeleteTeamCommand } from './commands/impl/delete-team.command';
+import { CreateTeamCommand } from './commands/impl/create-portfolio.command';
+import { CounterService } from '../counters/service/counter.service';
+import { TeamCountersResponseDto } from './dtos/team-counter.dto';
+import { TeamTotalStepsDto } from './dtos/team-total-counter.dto';
 
 @Controller('team')
 @ApiTags('team')
@@ -40,6 +41,7 @@ export class TeamController {
   constructor(
     private readonly _queryBus: QueryBus,
     private readonly _commandBus: CommandBus,
+    private readonly counterService: CounterService
   ) {}
 
   @UseGuards(AccessTokenGuard)
@@ -47,9 +49,7 @@ export class TeamController {
   @ApiOkResponse({ type: [CreateTeamDto] })
   @ApiBearerAuth()
   async getAll(@Res() res: Response) {
-    const teams = await this._queryBus.execute(
-      new GetTeamsListQuery(), // Replace with your team query
-    );
+    const teams = await this._queryBus.execute(new GetTeamsListQuery());
     res.status(HttpStatus.OK).json(new SuccessResponseWithBody(teams));
   }
 
@@ -58,13 +58,8 @@ export class TeamController {
   @ApiParam({ name: 'id', type: Number })
   @ApiOkResponse({ type: CreateTeamDto })
   @ApiBearerAuth()
-  async getTeamById(@Param() param: { id: number }, @Res() res: Response) {
-    const { id } = param;
-
-    const team = await this._queryBus.execute(
-      new GetTeamByIdQuery(id), // Replace with your team query
-    );
-
+  async getTeamById(@Param('id') id: number, @Res() res: Response) {
+    const team = await this._queryBus.execute(new GetTeamByIdQuery(id));
     res.status(HttpStatus.OK).json(new SuccessResponseWithBody(team));
   }
 
@@ -78,12 +73,11 @@ export class TeamController {
     @Body() body: CreateTeamDto,
     @Res() res: Response,
   ) {
-    const owner = req.user;
+    const userId = req?.user.id;
     const { name, description } = body;
 
     const team = await this._commandBus.execute(
-      //@ts-ignore
-      new CreateTeamCommand(name, owner, description),
+      new CreateTeamCommand(name, description, userId),
     );
 
     res.status(HttpStatus.OK).json(new SuccessResponseWithBody(team));
@@ -97,18 +91,15 @@ export class TeamController {
   @ApiBearerAuth()
   async updateTeam(
     @Req() req: GuardedRequest,
-    @Param() param: { id: number },
+    @Param('id') id: number,
     @Body() body: UpdateTeamDto,
     @Res() res: Response,
   ) {
-    const ownerId: number = req.user.id;
+    const userId = req.user.id;
     const { name, description } = body;
-    const { id } = param;
 
-  
     await this._commandBus.execute(
-      //@ts-ignore
-      new UpdateTeamCommand(id, name, ownerId, description),
+      new UpdateTeamCommand(id, name, description, userId),
     );
 
     res
@@ -123,16 +114,35 @@ export class TeamController {
   @ApiBearerAuth()
   async deleteTeam(
     @Req() req: GuardedRequest,
-    @Param() param: { id: number },
+    @Param('id') id: number,
     @Res() res: Response,
   ) {
     const ownerId = req.user.id;
-    const { id } = param;
 
     await this._commandBus.execute(new DeleteTeamCommand(id, ownerId));
 
     res
       .status(HttpStatus.OK)
       .json(new MessageResponse('The team was successfully deleted.'));
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get(':teamId/counters')
+  @ApiOkResponse({ type: TeamCountersResponseDto })
+  @ApiParam({ name: 'teamId', type: Number })
+  @ApiBearerAuth()
+  async listTeamCounters(@Param('teamId') teamId: number, @Res() res: Response) {
+    const counters = await this.counterService.listTeamMembersWithSteps(teamId);
+    res.status(HttpStatus.OK).json(new SuccessResponseWithBody(counters));
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get(':teamId/total-steps')
+  @ApiOkResponse({ type: TeamTotalStepsDto })
+  @ApiParam({ name: 'teamId', type: Number })
+  @ApiBearerAuth()
+  async getTeamTotalSteps(@Param('teamId') teamId: number, @Res() res: Response) {
+    const totalSteps = await this.counterService.getTeamTotalSteps(teamId);
+    res.status(HttpStatus.OK).json(new SuccessResponseWithBody(totalSteps));
   }
 }

@@ -17,6 +17,8 @@ const getDatabaseConfig = () => {
   const dbName = process.env.PGDATABASE;
   const port = process.env.PGPORT;
 
+  console.log(host, login, password, dbName, port)
+
   if (!host || !login || !dbName || !password || !port || isNaN(+port)) {
     throw new Error('Required env db variables not defined or invalid');
   }

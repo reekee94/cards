@@ -5,18 +5,17 @@ import { TeamController } from './team.controller';
 import { TeamRepository } from './repositories/team.repository';
 import { CardQueryHandlers } from './queries/handlers';
 import { CardCommandHandlers } from './commands/handlers';
-import { CounterRepository } from '../counters/repositories/counter.repository';
-import { Counter } from '../counters/entities/counter.entity';
+import { Team } from './entities/team.entity';
+
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Counter]), CqrsModule],
+  imports: [TypeOrmModule.forFeature([Team]), CqrsModule],
   controllers: [TeamController],
   providers: [
     TeamRepository,
-    CounterRepository,
     ...CardQueryHandlers,
     ...CardCommandHandlers,
-    // CardsSeed,
   ],
   exports: [TeamRepository],
 })

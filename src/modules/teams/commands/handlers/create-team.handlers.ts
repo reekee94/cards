@@ -15,15 +15,15 @@ export class CreateTeamCommandHandler
   ) {}
 
   async execute(command: CreateTeamCommand): Promise<any> {
-    const { name, description, ownerId } = command;
+    const { name, description, userId } = command;
 
     return await runWithQueryRunner(this._ds, async (qr) => {
-      const owner = await qr.manager.findOne(User, { where: { id: ownerId } });
-      if (!owner) {
-        throw new BadRequestException(`Owner with id: ${ownerId} not found`);
+      const user = await qr.manager.findOne(User, { where: { id: userId } });
+      if (!user) {
+        throw new BadRequestException(`User with id: ${userId} not found`);
       }
 
-      const team = await this._teamRepo.create(name, description, owner, undefined, qr);
+      const team = await this._teamRepo.create(name, description, [user], qr);
       return team;
     });
   }

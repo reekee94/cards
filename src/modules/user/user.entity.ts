@@ -1,5 +1,5 @@
 import { DefaultFields } from 'src/common/utils/default.fields';
-import { Entity, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn, OneToMany, ManyToOne } from 'typeorm';
 import { Token } from '../token/token.entity';
 import { Team } from '../teams/entities/team.entity';
 
@@ -19,10 +19,6 @@ export class User extends DefaultFields {
   @JoinColumn()
   refreshToken: Token;
 
-  @OneToMany(() => Team, (team) => team.owner, {
-    onDelete: 'CASCADE',
-    nullable: true,
-    // eager: true,
-  })
-  teams: Team;
+  @ManyToOne(() => Team, (team) => team.members)
+  team: Team;
 }

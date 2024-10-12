@@ -12,8 +12,7 @@ export class DefaultTeamDto {
   @ApiProperty()
   description: string;
 
-  @ApiProperty()
-  totalSteps: number;
+
 
   @ApiProperty({ type: () => User })
   owner: User;
@@ -23,8 +22,6 @@ export class DefaultTeamDto {
     dto.id = team.id;
     dto.name = team.name;
     dto.description = team.description;
-    dto.totalSteps = team.calculateTotalSteps();
-    dto.owner = team.owner;
     return dto;
   }
 }
