@@ -26,6 +26,7 @@ export class UserRepository {
     const userRepo = qr ? this._getRepository(qr) : this._getDefaultRepository();
     const candidate = await userRepo.findOne({
       where: { id },
+      relations: ['team']
     });
 
     return candidate;

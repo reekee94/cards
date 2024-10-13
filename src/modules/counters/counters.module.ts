@@ -13,6 +13,7 @@ import { User } from '../user/user.entity';
     TypeOrmModule.forFeature([User, Team]),
   ],
   controllers: [CounterController],
-  providers: [CounterService, UserRepository, TeamRepository],
+  providers: [CounterService, TeamRepository, UserRepository],
+  exports: [CounterService]
 })
 export class CountersModule {}

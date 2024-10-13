@@ -1,8 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from '../../user/user.repository';
 import { TeamRepository } from '../../teams/repositories/team.repository';
-
 
 @Injectable()
 export class CounterService implements OnModuleInit {
@@ -10,9 +8,7 @@ export class CounterService implements OnModuleInit {
   private teamSteps = new Map<number, number>();
 
   constructor(
-    @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
-    @InjectRepository(TeamRepository)
     private readonly teamRepository: TeamRepository,
   ) {}
 
@@ -23,27 +19,14 @@ export class CounterService implements OnModuleInit {
     });
   }
 
-
   async addSteps(userId: number, steps: number) {
     const user = await this.userRepository.findOneById(userId);
     if (!user) {
       throw new Error('User not found');
     }
 
-    const currentSteps = this.userSteps.get(userId) || 0
+    const currentSteps = this.userSteps.get(Number(userId)) || 0;
     this.userSteps.set(userId, currentSteps + steps);
-
-    if (user.team) {
-      await this.updateTeamSteps(user.team.id);
-    }
-  }
-
-  async refreshUserSteps(userId: number) {
-    const user = await this.userRepository.findOneById(userId);
-    if (!user) {
-      throw new Error('User not found');
-    }
-
 
     if (user.team) {
       await this.updateTeamSteps(user.team.id);
@@ -57,27 +40,42 @@ export class CounterService implements OnModuleInit {
     }
 
     let totalSteps = 0;
+
     for (const member of team.members) {
-      totalSteps += this.userSteps.get(member.id) || 0
+      totalSteps += this.userSteps.get(member.id) || 0;
     }
     this.teamSteps.set(teamId, totalSteps);
   }
 
+  async refreshUserSteps(userId: number) {
+    const user = await this.userRepository.findOneById(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    this.userSteps.set(userId, 0);
+
+    if (user.team) {
+      await this.updateTeamSteps(user.team.id);
+    }
+  }
 
   getTeamTotalSteps(teamId: number): number {
-    return this.teamSteps.get(teamId) || 0;
+    return this.teamSteps.get(Number(teamId)) || 0;
   }
 
   getUserSteps(userId: number): number {
-    return this.userSteps.get(userId) || 0;
+    return this.userSteps.get(Number(userId)) || 0;
   }
 
-  async listTeamMembersWithSteps(teamId: number): Promise<{ userId: number; steps: number }[]> {
+  async listTeamMembersWithSteps(
+    teamId: number,
+  ): Promise<{ userId: number; steps: number }[]> {
     const team = await this.teamRepository.findOneById(teamId);
     if (!team) {
       throw new Error('Team not found');
     }
-  
+
     return team.members.map((member) => ({
       userId: member.id,
       steps: this.getUserSteps(member.id),

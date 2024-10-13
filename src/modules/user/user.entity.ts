@@ -19,6 +19,6 @@ export class User extends DefaultFields {
   @JoinColumn()
   refreshToken: Token;
 
-  @ManyToOne(() => Team, (team) => team.members)
+  @ManyToOne(() => Team, (team) => team.members, { onDelete: 'SET NULL' })
   team: Team;
 }
