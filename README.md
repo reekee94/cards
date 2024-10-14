@@ -32,5 +32,11 @@ $ npm run start:dev
 
 
 ```
+## Shortest way Docker installed needed
+run in terminal: 
+docker-compose build
+docker-compose up
+and go:
+http://localhost:3010/swagger
 
 
